@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Sign Up</title>
+	<link href="assets/favicon.ico" rel="shortcut icon">
+	<link href="assets/stylesheet.css" rel="stylesheet">
+</head>
+<body>
+	<form action="/register" method="post">
+		<div class="login_container center all" style="min-width: 620px;">
+			<div class="row">
+				<div class="col-6">
+					<h5 style="margin: 14px 0 0 0;">Create New Account</h5>
+					<div class="row" style="margin-top: 28px;">
+						<div class="col-6" style="padding-right: 8px;">
+							<input name="username" placeholder="First Name" type="text">
+						</div>
+						<div class="col-6" style="padding-left: 8px;">
+							<input placeholder="Last Name" type="text">
+						</div>
+					</div><input class="col-12" id="text-field-hero-email" name="email" placeholder="Email" type="email"> <span class="caption-info">Use 8 or more characters with a mix of letters, numbers &
+					symbols</span>
+					<div class="row" style="margin-top: 18px;">
+						<div class="col-6" style="padding-right: 8px;">
+							<input id="text-field-hero-password" name="password" placeholder="Password" type="password">
+						</div>
+						<div class="col-6" style="padding-left: 8px;">
+							<input placeholder="Conform" type="password">
+						</div>
+					</div><span class="caption-info">Use 8 or more characters with a mix of letters, numbers & symbols</span>
+					<div class="lr_container">
+						<a href="/login" style="float: left;">Sign in instead</a> <button style="float: right;" type="submit">Create</button>
+					</div>
+				</div>
+				<div class="col-6" style="max-width: 264px;padding-left: 34px;text-align: center;">
+					<img alt="" src="/assets/account.svg"> One account. All of Google working for you.
+				</div>
+			</div>
+		</div>
+	</form>
+</body>
+</html>

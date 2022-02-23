@@ -1,0 +1,32 @@
+[package]
+name = "overflow"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "main"
+
+[lib]
+name = "liboverflow"
+path = "src/lib.rs"
+
+[dependencies]
+env_logger = "0.3"
+log = "0.4"
+
+# For https requests
+openssl = "0.10"
+
+# rust async web-framework
+actix-web = { version = "3", features = ["openssl"], package="actix-web" }
+actix-files = { version = "0.5.0", package="actix-files" }
+
+# sqlite3 database
+rusqlite = { version = "0.26.3", features = ["blob"] }
+serde_json = "1.0.59"
+serde = "1"
+
+[build-dependencies]
+sass = { version = "0.2.2", package="sass-rs" }
+# For generating certificates and keystore
+openssl = "0.10"
