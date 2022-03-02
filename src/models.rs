@@ -13,21 +13,23 @@ impl AppContext {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
+pub struct Session {
+    pub id: usize,
+    pub username: String,
+    pub sessionid: String
+}
+
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Person {
-    // id: usize,
+    pub id: usize,
     pub username: String,
     pub email: String,
     pub password: String,
+    pub sessionid: String
 }
 
 #[derive(Debug, Deserialize)]
 pub struct Login {
     pub username: String,
     pub password: String,
-}
-
-#[derive(Debug)]
-pub struct Session {
-    pub _session: String,
-    pub username: String,
 }

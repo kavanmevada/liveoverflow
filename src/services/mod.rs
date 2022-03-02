@@ -1,4 +1,4 @@
-mod account;
+mod profile;
 mod assets;
 mod scripts;
 mod index;
@@ -15,4 +15,4 @@ pub use register::post_register as POST_REGISTER;
 pub use login::get_login as GET_LOGIN;
 pub use login::post_login as POST_LOGIN;
 
-pub use account::get_account as GET_ACCOUNT;
+pub use profile::get_profile as GET_PROFILE;

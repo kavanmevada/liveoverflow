@@ -1,42 +1,89 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-	<title>Sign Up</title>
-	<link href="assets/favicon.ico" rel="shortcut icon">
-	<link href="assets/stylesheet.css" rel="stylesheet">
+  <title>Sign Up</title>
+  <meta charset="UTF-8">
+  <link href="assets/favicon.ico" rel="shortcut icon">
+  <link href="assets/stylesheet.css" rel="stylesheet">
 </head>
 <body>
-	<form action="/register" method="post">
-		<div class="login_container center all" style="min-width: 620px;">
-			<div class="row">
-				<div class="col-6">
-					<h5 style="margin: 14px 0 0 0;">Create New Account</h5>
-					<div class="row" style="margin-top: 28px;">
-						<div class="col-6" style="padding-right: 8px;">
-							<input name="username" placeholder="First Name" type="text">
-						</div>
-						<div class="col-6" style="padding-left: 8px;">
-							<input placeholder="Last Name" type="text">
-						</div>
-					</div><input class="col-12" id="text-field-hero-email" name="email" placeholder="Email" type="email"> <span class="caption-info">Use 8 or more characters with a mix of letters, numbers &
-					symbols</span>
-					<div class="row" style="margin-top: 18px;">
-						<div class="col-6" style="padding-right: 8px;">
-							<input id="text-field-hero-password" name="password" placeholder="Password" type="password">
-						</div>
-						<div class="col-6" style="padding-left: 8px;">
-							<input placeholder="Conform" type="password">
-						</div>
-					</div><span class="caption-info">Use 8 or more characters with a mix of letters, numbers & symbols</span>
-					<div class="lr_container">
-						<a href="/login" style="float: left;">Sign in instead</a> <button style="float: right;" type="submit">Create</button>
-					</div>
-				</div>
-				<div class="col-6" style="max-width: 264px;padding-left: 34px;text-align: center;">
-					<img alt="" src="/assets/account.svg"> One account. All of Google working for you.
-				</div>
-			</div>
-		</div>
-	</form>
+  <section class="hero is-fullheight">
+    <div class="hero-body">
+      <div class="container">
+        <div class="columns is-centered">
+          <div class="column is-fullwidth-mobile is-two-thirds-tablet is-half-desktop is-one-third-widescreen is-one-quarter-fullhd">
+            <div class="has-text-centered mb-6">
+              <h3 class="is-size-3">👋</h3>
+              <h1 class="is-size-3 mt-3 has-text-weight-semibold">Create your account</h1>
+              <p class="mt-1">It's free and easy</p>
+            </div>
+            <form action="/register" class="container" method="post">
+              <div class="field">
+                <label class="is-size-7">Name</label>
+                <div class="control">
+                  <input class="input mt-1" name="username" placeholder="Your Name" type="text">
+                </div>
+                <p class="help is-danger is-hidden" id="username-error-msg">This email is invalid</p>
+              </div>
+              <div class="field">
+                <label class="is-size-7">Email Eddress</label>
+                <div class="control">
+                  <input class="input mt-1" name="email" placeholder="Your Email Address" type="text">
+                </div>
+                <p class="help is-danger is-hidden" id="email-error-msg">This email is invalid</p>
+              </div>
+              <div class="field">
+                <label class="is-size-7">Password</label>
+                <p class="control"><input class="input" id="password-input" name="password" placeholder="Password" type="password"></p>
+                <p class="help is-danger is-hidden" id="password-error-msg">This email is invalid</p>
+                <p class="control mt-2"><input class="input" id="re-password-input" placeholder="Re-Type Password" type="password"></p>
+                <p class="help is-danger is-hidden" id="verify-error-msg">This email is invalid</p>
+              </div>
+              <div class="field">
+                <div class="control">
+                  <input name="id" type="hidden" value="0"> <input name="sessionid" type="hidden" value="null"> <button class="button is-link is-fullwidth" disabled id="submit-btn" type="submit">Register</button>
+                </div>
+              </div>
+              <div class="field has-text-centered">
+                <label class="is-size-7">OR</label>
+                <div class="control mt-2">
+                  <button class="button is-fullwidth">
+                  <figure class="image is-16x16">
+                    <svg class="is-flex is-vcentered" viewbox="0 0 326667 333333" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M326667 170370c0-13704-1112-23704-3518-34074H166667v61851h91851c-1851 15371-11851 38519-34074 54074l-311 2071 49476 38329 3428 342c31481-29074 49630-71852 49630-122593m0 0z" fill="#4285f4"></path>
+                    <path d="M166667 333333c44999 0 82776-14815 110370-40370l-52593-40742c-14074 9815-32963 16667-57777 16667-44074 0-81481-29073-94816-69258l-1954 166-51447 39815-673 1870c27407 54444 83704 91852 148890 91852z" fill="#34a853"></path>
+                    <path d="M71851 199630c-3518-10370-5555-21482-5555-32963 0-11482 2036-22593 5370-32963l-93-2209-52091-40455-1704 811C6482 114444 1 139814 1 166666s6482 52221 17777 74814l54074-41851m0 0z" fill="#fbbc04"></path>
+                    <path d="M166667 64444c31296 0 52406 13519 64444 24816l47037-45926C249260 16482 211666 1 166667 1 101481 1 45185 37408 17777 91852l53889 41853c13520-40185 50927-69260 95001-69260m0 0z" fill="#ea4335"></path></svg>
+                  </figure><span class="ml-2">Google</span></button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <script type="text/javascript">
+        const source1 = document.getElementById('password-input');
+        const source2 = document.getElementById('re-password-input');
+        const result = document.getElementById('verify-error-msg');
+        const submit_btn = document.getElementById("submit-btn");
+
+        const inputHandler = function(e) {
+            if (source1.value != source2.value) {
+            result.innerHTML = "Passwords are not same";
+            result.classList.remove("is-hidden");
+            submit_btn.disabled = true;
+            } else {
+                result.classList.add("is-hidden");
+                submit_btn.disabled = false;
+            }
+        }
+
+        source1.addEventListener('input', inputHandler);
+        source1.addEventListener('propertychange', inputHandler); // for IE8
+        source2.addEventListener('input', inputHandler);
+        source2.addEventListener('propertychange', inputHandler); // for IE8
+  </script>
 </body>
 </html>

@@ -4,7 +4,10 @@ use actix_web::{
 };
 use std::io::Read;
 
-use crate::models::{AppContext, Person};
+use crate::{
+    models::{AppContext, Person},
+    sqlite3::{self, Registration},
+};
 
 #[actix_web::post("/register")]
 async fn post_register(
@@ -12,25 +15,16 @@ async fn post_register(
     form: Form<Person>,
     _req: HttpRequest,
 ) -> impl Responder {
-    match &data.connection.execute(
-        "INSERT INTO person (username, email, password)
-        VALUES (:username, :email, :password)",
-        &[
-            (":username", &form.username),
-            (":email", &form.email),
-            (":password", &form.password),
-        ],
-    ) {
-        Ok(updated) => {
-            println!("{} rows were updated", updated);
+    let ret = sqlite3::register(&data.connection, form.0);
+
+    match ret {
+        Registration::Success(person) => {
+            dbg!(person);
             HttpResponse::Found().header("Location", "/login").finish()
         }
-        Err(err) => {
-            println!("update failed: {}", err);
-            HttpResponse::Found()
-                .header("Location", "/register")
-                .finish()
-        }
+        _ => HttpResponse::Found()
+            .header("Location", "/register")
+            .finish(),
     }
 }
 

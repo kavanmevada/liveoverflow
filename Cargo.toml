@@ -18,6 +18,7 @@ log = "0.4"
 openssl = "0.10"
 
 # rust async web-framework
+http = { version = "3.0.0", package="actix-http" }
 actix-web = { version = "3", features = ["openssl"], package="actix-web" }
 actix-files = { version = "0.5.0", package="actix-files" }
 
