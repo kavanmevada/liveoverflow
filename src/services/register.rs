@@ -22,6 +22,20 @@ async fn post_register(
             dbg!(person);
             HttpResponse::Found().header("Location", "/login").finish()
         }
+
+        Registration::Failed(_error) => {
+            //HttpResponse::Found().header("Content-Type", "application/json").body("{ body: \"This is the error\" }")
+            let mut buffer = String::new();
+            let page = std::fs::File::open("static/register.html").and_then(|mut f| f.read_to_string(&mut buffer));
+            if page.is_ok() {
+                HttpResponse::Ok().body(buffer.replace(
+                    r#"<p class="help is-danger is-hidden" id="username-error-msg"></p>"#, 
+                    r#"<p class="help is-danger" id="username-error-msg">This email is invalid</p>"#
+                ))
+            } else {
+                HttpResponse::NoContent().finish()
+            }
+        }
         _ => HttpResponse::Found()
             .header("Location", "/register")
             .finish(),
@@ -30,19 +44,11 @@ async fn post_register(
 
 #[actix_web::get("/register")]
 async fn get_register(_req: HttpRequest) -> impl Responder {
-    if let Some(render) = std::fs::File::open("static/register.html")
-        .ok()
-        .and_then(|mut f| {
-            let mut buf = Vec::new();
-            if f.read_to_end(&mut buf).is_ok() {
-                String::from_utf8(buf).ok()
-            } else {
-                None
-            }
-        })
-    {
-        HttpResponse::Ok().body(render)
+    let mut buffer = String::new();
+    let page = std::fs::File::open("static/register.html").and_then(|mut f| f.read_to_string(&mut buffer));
+    if page.is_ok() {
+        HttpResponse::Ok().body(buffer)
     } else {
-        HttpResponse::NoContent().body("")
+        HttpResponse::NoContent().finish()
     }
 }

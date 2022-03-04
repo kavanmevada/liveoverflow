@@ -35,6 +35,7 @@ pub enum Registration {
 }
 
 #[derive(Debug)]
+#[derive(PartialEq)]
 pub enum RegistrationError {
     UsernameExist,
     MultipleAccounts,
@@ -84,39 +85,6 @@ pub fn register(con: &Connection, mut person: Person) -> Registration {
     }
 }
 
-// pub fn login(
-//     con: &Connection,
-//     username: &str,
-//     password: &str,
-//     browser: Option<&str>,
-//     host: &str,
-// ) -> Login {
-//     if let Some(mut person) = person(con, username) {
-//         if let Some(session) = session(con, ("username", username)) {
-//             person.sessionid = session.sessionid;
-//             return Login::Success(person);
-//         } else if let Some(browser) = browser {
-//             let data = username.bytes().chain(browser.bytes()).chain(host.bytes());
-
-//             let sessionid = encode!(sha::sha256(data.collect::<Vec<u8>>().as_slice()));
-
-//             let password = encode!(sha::sha256(password.as_bytes()));
-//             if person.password == password
-//                 && con
-//                     .execute(
-//                         "insert into sessions (username, session) values (?1, ?2)",
-//                         params![username, sessionid],
-//                     )
-//                     .is_ok()
-//             {
-//                 person.sessionid = sessionid;
-//                 return Login::Success(person);
-//             }
-//         }
-//     }
-
-//     Login::Failed(_)
-// }
 
 #[derive(Debug)]
 pub enum LoginType<'a> {
@@ -128,7 +96,7 @@ pub fn login<'a>(con: &Connection, ltype: LoginType<'a>) -> Login {
     match ltype {
         LoginType::Session(sessionid) => {
             if let Some(mut person) =
-                session(con, ("session", &sessionid)).and_then(|s| person(con, &s.username))
+                session(con, ("session", &sessionid)).and_then(|s| person(con, ("username", &s.username)))
             {
                 person.sessionid = sessionid.to_string();
                 Login::Success(person)
@@ -148,7 +116,7 @@ pub fn login<'a>(con: &Connection, ltype: LoginType<'a>) -> Login {
 
             let password = encode!(sha::sha256(pass.as_bytes()));
 
-            if let Some(mut person) = person(con, username) {
+            if let Some(mut person) = person(con, ("username", username)) {
                 if person.password == password {
                     match con.execute(
                         "insert or replace into sessions (username, session) values (?1, ?2)",
@@ -190,21 +158,45 @@ fn session(conn: &Connection, arg: (&str, &str)) -> Option<Session> {
     rows.next()?.ok()
 }
 
-pub fn person(conn: &Connection, username: &str) -> Option<Person> {
-    let mut stmt = conn
-        .prepare("select * from person where username=:username")
-        .ok()?;
-    let f = |row: &Row<'_>| -> Result<Person, rusqlite::Error> {
-        Ok(Person {
-            id: row.get(0)?,
-            username: row.get(1)?,
-            email: row.get(2)?,
-            password: row.get(3)?,
-            sessionid: "null".to_string(),
-        })
-    };
 
-    let mut rows = stmt.query_and_then(&[(":username", username)], f).ok()?;
+pub fn person(conn: &Connection, arg: (&str, &str)) -> Option<Person> {
+    let mut stmt = conn
+        .prepare(&format!("SELECT * FROM person WHERE {0} = :{0}", arg.0))
+        .ok()?;
+    let mut rows = stmt
+        .query_and_then(
+            &[(&*format!(":{}", arg.0), arg.1)],
+            |row: &Row<'_>| -> Result<Person, rusqlite::Error> {
+                Ok(Person {
+                    id: row.get(0)?,
+                    username: row.get(1)?,
+                    email: row.get(2)?,
+                    password: row.get(3)?,
+                    sessionid: "null".to_string(),
+                })
+            },
+        )
+        .ok()?;
 
     rows.next()?.ok()
 }
+
+
+// pub fn person(conn: &Connection, username: &str) -> Option<Person> {
+//     let mut stmt = conn
+//         .prepare("select * from person where username=:username")
+//         .ok()?;
+//     let f = |row: &Row<'_>| -> Result<Person, rusqlite::Error> {
+//         Ok(Person {
+//             id: row.get(0)?,
+//             username: row.get(1)?,
+//             email: row.get(2)?,
+//             password: row.get(3)?,
+//             sessionid: "null".to_string(),
+//         })
+//     };
+
+//     let mut rows = stmt.query_and_then(&[(":username", username)], f).ok()?;
+
+//     rows.next()?.ok()
+// }

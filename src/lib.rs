@@ -8,6 +8,7 @@ pub mod ssl;
 
 pub mod models;
 pub mod services;
+pub mod api;
 
 // let sha256 = openssl::sha::sha256(person.password.as_bytes());
 // let sha256_str = sha256

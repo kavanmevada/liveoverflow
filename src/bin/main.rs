@@ -7,7 +7,7 @@ use liboverflow::{
         GET_PROFILE, GET_ASSETS, GET_INDEX, GET_LOGIN, GET_REGISTER, GET_SCRIPTS, POST_LOGIN,
         POST_REGISTER,
     },
-    sqlite3,
+    sqlite3, api::{POST_IS_VALID_EMAIL, POST_IS_VALID_USERNAME},
 };
 use web::{App, HttpServer};
 
@@ -32,6 +32,8 @@ async fn main() -> std::io::Result<()> {
             .service(GET_LOGIN)
             .service(POST_LOGIN)
             .service(GET_PROFILE)
+            .service(POST_IS_VALID_USERNAME)
+            .service(POST_IS_VALID_EMAIL)
     })
     .bind_openssl(ADDRESS, liboverflow::ssl::builder()?)?
     .run()

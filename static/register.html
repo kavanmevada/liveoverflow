@@ -21,14 +21,14 @@
               <div class="field">
                 <label class="is-size-7">Name</label>
                 <div class="control">
-                  <input class="input mt-1" name="username" placeholder="Your Name" type="text">
+                  <input class="input mt-1" id="username-input" name="username" placeholder="Your Name" type="text">
                 </div>
-                <p class="help is-danger is-hidden" id="username-error-msg">This email is invalid</p>
+                <p class="help is-danger is-hidden" id="username-error-msg"></p>
               </div>
               <div class="field">
                 <label class="is-size-7">Email Eddress</label>
                 <div class="control">
-                  <input class="input mt-1" name="email" placeholder="Your Email Address" type="text">
+                  <input class="input mt-1" id="email-input" name="email" placeholder="Your Email Address" type="text">
                 </div>
                 <p class="help is-danger is-hidden" id="email-error-msg">This email is invalid</p>
               </div>
@@ -64,11 +64,36 @@
     </div>
   </section>
   <script type="text/javascript">
+        ["username", "email"].forEach(function (item) {
+            const input = document.getElementById(item+"-input");
+            const msg = document.getElementById(item+"-error-msg");
+            input.addEventListener('input', function(e) {
+              fetch('/api/validate/'+item, {
+                  method: 'POST',
+                  body: new URLSearchParams({
+                      'query': input.value,
+                  })
+              })
+              .then(response => response.json())
+              .then(data => {
+                if (data.result == "ok") {
+                  msg.classList.add("is-hidden");
+                  submit_btn.disabled = false
+                } else {
+                  submit_btn.disabled = true;
+                  msg.innerHTML = data.msg;
+                  msg.classList.remove("is-hidden");
+                }
+              });
+            });
+        })
+
+
+
         const source1 = document.getElementById('password-input');
         const source2 = document.getElementById('re-password-input');
         const result = document.getElementById('verify-error-msg');
         const submit_btn = document.getElementById("submit-btn");
-
         const inputHandler = function(e) {
             if (source1.value != source2.value) {
             result.innerHTML = "Passwords are not same";
@@ -79,7 +104,6 @@
                 submit_btn.disabled = false;
             }
         }
-
         source1.addEventListener('input', inputHandler);
         source1.addEventListener('propertychange', inputHandler); // for IE8
         source2.addEventListener('input', inputHandler);
